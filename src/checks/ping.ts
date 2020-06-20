@@ -2,6 +2,7 @@ import Base from './base';
 import { IPv4 } from 'ip-num';
 import ping, { pingResponse, extendedPingOptions } from 'pingman';
 
+//Options to be used by `pingman`
 const PING_OPTIONS: extendedPingOptions = {
     timeout: 1
 };

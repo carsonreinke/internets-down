@@ -1,4 +1,4 @@
-import command from '../src/command';
+import command, { Options } from '../src/command';
 import { IPv4 } from 'ip-num';
 
 let mockExit, mockStdout;
@@ -28,6 +28,16 @@ test('dns option', async () => {
 
 test('invalid dns option', async () => {
     await expect(command(['', '', '--dns', '0.0.0'])).rejects.toThrow();
+});
+
+test('gateway option', async () => {
+    const options: Options = await command(['', '', '--gateway', '0.0.0.0']);
+    expect(mockExit).not.toHaveBeenCalled();
+    expect(options.externalGateway).toEqual(IPv4.fromDecimalDottedString('0.0.0.0'));
+});
+
+test('invalid gateway option', async () => {
+    await expect(command(['', '', '--gateway', '0.0.0'])).rejects.toThrow();
 });
 
 test('version', async () => {

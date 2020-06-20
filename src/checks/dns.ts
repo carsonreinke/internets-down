@@ -9,7 +9,7 @@ export default class DNS extends Ping {
     }
 
     async check(configuration: Configuration): Promise<boolean> {
-        return await configuration.defaultDNS.find(async (address) => await this.ping)
+        return (await Promise.all(configuration.defaultDNS.map(address => this.ping(address)))).some(v => v)
             && await this.ping(configuration.testDNS);
     }
 }

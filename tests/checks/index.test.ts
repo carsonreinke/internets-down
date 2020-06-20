@@ -26,7 +26,7 @@ const configuration: Configuration = {
 };
 
 beforeEach(() => {
-    sink = new streams.WritableStream()
+    sink = new streams.WritableStream();
     logger = new Logger(sink);
     check = new Fake();
     spyCheck = jest.spyOn(check, 'check');

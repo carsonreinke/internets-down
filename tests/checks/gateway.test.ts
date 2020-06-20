@@ -1,12 +1,21 @@
 import Gateway from '../../src/checks/gateway';
+import Configuration from '../../src/configuration';
+import { IPv4 } from 'ip-num';
 
 jest.mock('pingman');
 const ping = require('pingman');
 
-let gateway;
+let gateway: Gateway,
+    configuration: Configuration;
 
 beforeEach(() => {
     gateway = new Gateway();
+    configuration = { 
+        defaultDNS: [], 
+        testDNS: IPv4.fromDecimalDottedString('0.0.0.0'), 
+        hostname: 'example.com', 
+        internalGateway: IPv4.fromDecimalDottedString('0.0.0.0') 
+    };
 
     ping.mockResolvedValue({});
 });
@@ -14,13 +23,16 @@ beforeEach(() => {
 test('check', async () => {
     ping.mockResolvedValue({ alive: true });
 
-    const result = await gateway.check({ dns: '0.0.0.0', hostname: 'example.com', internalGateway: '0.0.0.0' });
+    const result = await gateway.check(configuration);
 
     expect(result).toBeTruthy();
+    expect(ping).toHaveBeenCalled();
 });
 
-test('check missing gateway', async () => {
-    const result = await gateway.check({ dns: '0.0.0.0', hostname: 'example.com' });
+test('check missing internal gateway', async () => {
+    configuration.internalGateway = undefined;
+
+    const result = await gateway.check(configuration);
 
     expect(result).toBeFalsy();
 });
@@ -28,7 +40,7 @@ test('check missing gateway', async () => {
 test('check not alive', async () => {
     ping.mockResolvedValue({ alive: false });
 
-    const result = await gateway.check({ dns: '0.0.0.0', hostname: 'example.com', internalGateway: '0.0.0.0' });
+    const result = await gateway.check(configuration);
 
     expect(result).toBeFalsy();
 });
@@ -36,6 +48,5 @@ test('check not alive', async () => {
 test('check error', async () => {
     ping.mockRejectedValue(new Error('Failed'));
 
-    expect(gateway.check({ dns: '0.0.0.0', hostname: 'example.com', internalGateway: '0.0.0.0' }))
-        .rejects.toThrow();
+    expect(gateway.check(configuration)).rejects.toThrow();
 });

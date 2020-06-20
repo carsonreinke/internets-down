@@ -6,6 +6,7 @@ import version from './version';
 export interface Options {
     testDNS: IPv4;
     hostname: string;
+    externalGateway: IPv4;
 }
 
 /**
@@ -32,5 +33,5 @@ export default async function (argv: string[]): Promise<Options> {
     //Parse the provided arguments
     await program.parseAsync(argv);
 
-    return { testDNS: program.dns, hostname: program.hostname };
+    return { testDNS: program.dns, hostname: program.hostname, externalGateway: program.gateway };
 }

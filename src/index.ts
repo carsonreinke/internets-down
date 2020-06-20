@@ -1,6 +1,6 @@
 import command, { Options } from './command';
 import Configuration from './configuration';
-import { currentInterface } from './network';
+import { currentInterface, NetworkInterface } from './network';
 import Logger from './logger';
 import run from './checks';
 import Gateway from './checks/gateway';
@@ -9,24 +9,37 @@ import Base from './checks/base';
 import DNS from './checks/dns';
 import Lookup from './checks/lookup';
 import HTTP from './checks/http';
+import { Writable } from 'stream';
 
-module.exports = async () => {
+module.exports = async (
+    argv: string[] = process.argv, 
+    stdout: Writable = process.stdout, 
+    exitFn: (code?: number) => never = process.exit
+): Promise<void> => {
     let options: Options;
-    const logger: Logger = new Logger(process.stdout);
+    const logger: Logger = new Logger(stdout);
 
     //Handle the command line options
     try {
-        options = await command(process.argv);
+        options = await command(argv);
     }
     catch (err) {
         console.error(err);
-        process.exit(1);
+        exitFn(1);
         return;
     }
 
     //Load the interface / configuration
     logger.start('Loading network information')
-    const inter = await currentInterface();
+    let inter: NetworkInterface;
+    try {
+        inter = await currentInterface();
+    }
+    catch (err) {
+        logger.fail(err.message);
+        exitFn(2);
+        return;
+    }
     const configuration: Configuration = {
         ...options,
         ...inter
@@ -44,8 +57,8 @@ module.exports = async () => {
     let check: Base;
     for (check of checks) {
         if (!await run(logger, check, configuration)) {
-            process.exit(1);
-            break;
+            exitFn(3);
+            return;
         }
     }
 };

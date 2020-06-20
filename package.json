@@ -1,7 +1,7 @@
 {
   "name": "internets-down",
-  "version": "0.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Check the webs, does it work?",
   "scripts": {
     "test": "jest",
     "build": "rm -Rf build && tsc -p ."

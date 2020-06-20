@@ -18,7 +18,7 @@ Object.defineProperty(dns, 'promises', {
 });
 
 beforeEach(() => {
-    defaultGateway.v4.mockResolvedValue({});
+    defaultGateway.v4.mockResolvedValue(undefined);
 });
 
 test('load empty', async () => {

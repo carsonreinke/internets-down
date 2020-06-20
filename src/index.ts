@@ -37,6 +37,8 @@ module.exports = async (
     }
     catch (err) {
         logger.fail(err.message);
+        stdout.write("\nA check failed 🙃\n");
+        
         exitFn(2);
         return;
     }
@@ -57,8 +59,13 @@ module.exports = async (
     let check: Base;
     for (check of checks) {
         if (!await run(logger, check, configuration)) {
+            stdout.write("\nA check failed 🙃\n");
+
             exitFn(3);
             return;
         }
     }
+
+    //Done
+    stdout.write("\nAll checks passed 🙂\n");
 };

@@ -15,7 +15,7 @@ export interface Options {
  * @param value 
  * @returns IPv4
  */
-function parseIP(value: string): IPv4 {
+function parseIP(value: string): IPv4 | string {
     return IPv4.fromDecimalDottedString(value);
 }
 
@@ -26,12 +26,17 @@ export default async function (argv: string[]): Promise<Options> {
     program.version(await version());
 
     //Options
-    program.option('--dns <ip>', 'Additional DNS server to check', parseIP, IPv4.fromDecimalDottedString('1.1.1.1'));
+    program.option('--dns <ip>', 'Additional DNS server to check', parseIP, '1.1.1.1');
     program.option('--gateway <ip>', 'External gateway to check', parseIP);
     program.option('--hostname <host>', 'Hostname to check', 'example.com');
 
     //Parse the provided arguments
     await program.parseAsync(argv);
+
+    //Workaround for default value displaying properly in help
+    if(typeof(program.dns) === 'string') {
+        program.dns = parseIP(program.dns);
+    }
 
     return { testDNS: program.dns, hostname: program.hostname, externalGateway: program.gateway };
 }

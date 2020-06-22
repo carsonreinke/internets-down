@@ -48,7 +48,7 @@ Options:
   -h, --help         display help for command
 ```
 
-Non-zero exit code indicates failures.
+Non-zero exit code indicates failures.  Time outs are set to 1 second.
 
 ## Contributing
 

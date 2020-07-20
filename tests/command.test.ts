@@ -20,6 +20,12 @@ test('wrong option', async () => {
     expect(mockExit).toHaveBeenCalledWith(1);
 });
 
+test('default option', async () => {
+    const options = await command(['', '']);
+    expect(options.testDNS).toBeInstanceOf(IPv4);
+    expect(typeof(options.hostname)).toEqual('string');
+});
+
 test('dns option', async () => {
     const options = await command(['', '', '--dns', '0.0.0.0']);
     expect(mockExit).not.toHaveBeenCalled();

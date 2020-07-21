@@ -1,5 +1,6 @@
-import readPackageJson from 'read-package-json';
 import { promisify } from 'util';
+import { resolve, join } from 'path'
+const readPackageJson = require('read-package-json');
 
 interface Package {
     version: string
@@ -11,14 +12,7 @@ interface Package {
  * @returns Promise<string>
  */
 export default async function (): Promise<string> {
-    let pkg: Package;
-
-    try {
-        pkg = await promisify(readPackageJson)('../package.json', null, true);
-    }
-    catch (err) {
-        pkg = { version: '0.0.0' };
-    }
-
+    const file: string = resolve(join(__dirname, '..', 'package.json'));
+    const pkg: Package = await promisify(readPackageJson)(file, null, true);
     return pkg.version;
 }

@@ -1,4 +1,4 @@
-# Internets Down?
+# Internets Down? [![Build Status](https://travis-ci.org/carsonreinke/internets-down.svg?branch=master)](https://travis-ci.org/carsonreinke/internets-down)
 
 A silly command line utility to check network connection and do some simple tests to understand what the current problem is, if any.
 

@@ -1,6 +1,6 @@
 {
   "name": "internets-down",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Check the webs, does it work?",
   "scripts": {
     "test": "jest",

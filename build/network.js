@@ -60,7 +60,7 @@ function currentInternalGateway() {
                         return [2 /*return*/, undefined];
                     }
                     return [2 /*return*/, {
-                            address: common_1.parseIP(gateway.gateway),
+                            address: (0, common_1.parseIP)(gateway.gateway),
                             interface: gateway.interface
                         }];
             }
@@ -86,7 +86,7 @@ function currentInterface() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    interfaces = os_1.networkInterfaces();
+                    interfaces = (0, os_1.networkInterfaces)();
                     return [4 /*yield*/, currentInternalGateway()];
                 case 1:
                     internalGateway = _a.sent();
@@ -98,7 +98,7 @@ function currentInterface() {
                             if (internalGateway === undefined || internalGateway.interface === name) {
                                 found = {
                                     name: name,
-                                    address: common_1.parseIP(inter.address),
+                                    address: (0, common_1.parseIP)(inter.address),
                                     defaultDNS: defaultDNS
                                 };
                                 if (internalGateway !== undefined) {

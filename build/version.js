@@ -50,8 +50,8 @@ function default_1() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    file = path_1.resolve(path_1.join(__dirname, '..', 'package.json'));
-                    return [4 /*yield*/, util_1.promisify(readPackageJson)(file, null, true)];
+                    file = (0, path_1.resolve)((0, path_1.join)(__dirname, '..', 'package.json'));
+                    return [4 /*yield*/, (0, util_1.promisify)(readPackageJson)(file, null, true)];
                 case 1:
                     pkg = _a.sent();
                     return [2 /*return*/, pkg.version];

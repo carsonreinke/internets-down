@@ -1,5 +1,5 @@
 import Logger from '../src/logger';
-import streams = require('memory-streams');
+import * as streams from 'memory-streams';
 import { Writable } from 'stream';
 
 let sink: Writable,

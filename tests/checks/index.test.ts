@@ -1,7 +1,7 @@
 import run from '../../src/checks';
 import Base from '../../src/checks/base';
 import Logger from '../../src/logger';
-import streams = require('memory-streams');
+import * as streams from 'memory-streams';
 import { IPv4 } from 'ip-num';
 import Configuration from '../../src/configuration';
 

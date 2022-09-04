@@ -1,22 +1,22 @@
 import { Command } from 'commander';
 import commander = require('commander');
-import { IPv4 } from 'ip-num';
+import { IP, parseIP as _parseIP } from './common';
 import version from './version';
 
 export interface Options {
-    testDNS: IPv4;
+    testDNS: IP;
     hostname: string;
-    externalGateway: IPv4;
+    externalGateway: IP;
 }
 
 /**
  * Parse the string into IPv4 format
  * 
  * @param value 
- * @returns IPv4
+ * @returns IP
  */
-function parseIP(value: string): IPv4 | string {
-    return IPv4.fromDecimalDottedString(value);
+function parseIP(value: string): IP | string {
+    return _parseIP(value);
 }
 
 export default async function (argv: string[]): Promise<Options> {

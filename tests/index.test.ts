@@ -1,6 +1,6 @@
 
-import { IPv4 } from 'ip-num';
-import streams = require('memory-streams');
+import { IPv4, IPv6 } from 'ip-num';
+import * as streams from 'memory-streams';
 import { Writable } from 'stream';
 import { NetworkInterface } from '../src/network';
 import { Options } from '../src/command';
@@ -17,29 +17,13 @@ let mockExit: Function,
     sink: Writable;
 
 beforeEach(() => {
-    network.currentInterface.mockResolvedValue({
-        name: 'custom0',
-        address: IPv4.fromDecimalDottedString('0.0.0.0'),
-        defaultDNS: []
-    } as NetworkInterface);
     run.default.mockResolvedValue(true);
-    command.default.mockResolvedValue({
-        testDNS: IPv4.fromDecimalDottedString('0.0.0.0'),
-        hostname: 'example.com',
-        externalGateway: IPv4.fromDecimalDottedString('0.0.0.0')
-    } as Options);
     console.error = jest.fn();
-
+    
     sink = new streams.WritableStream();
     mockExit = jest.fn().mockReturnValue(undefined as never);
     jest.spyOn(process.stdout, 'write').mockReturnValue(true);
     jest.spyOn(process, 'exit').mockReturnValue(undefined as never);
-});
-
-test('run', async () => {
-    await index(['', ''], sink, mockExit);
-    expect(mockExit).not.toHaveBeenCalled();
-    expect(network.currentInterface).toHaveBeenCalled();
 });
 
 test('command failed', async () => {
@@ -51,20 +35,82 @@ test('command failed', async () => {
     expect(mockExit).toHaveBeenCalledWith(1);
 });
 
-test('network interface failed', async () => {
-    network.currentInterface.mockRejectedValue(new Error('Failed'));
+describe('ipv4', () => {
+    beforeEach(() => {
+        network.currentInterface.mockResolvedValue({
+            name: 'custom0',
+            address: IPv4.fromDecimalDottedString('0.0.0.0'),
+            defaultDNS: []
+        } as NetworkInterface);
+        
+        command.default.mockResolvedValue({
+            testDNS: IPv4.fromDecimalDottedString('0.0.0.0'),
+            hostname: 'example.com',
+            externalGateway: IPv4.fromDecimalDottedString('0.0.0.0')
+        } as Options);
+    });
 
-    await index(['', ''], sink, mockExit);
+    test('run', async () => {
+        await index(['', ''], sink, mockExit);
+        expect(mockExit).not.toHaveBeenCalled();
+        expect(network.currentInterface).toHaveBeenCalled();
+    });
 
-    expect(network.currentInterface).toHaveBeenCalled();
-    expect(mockExit).toHaveBeenCalledWith(2);
+    test('network interface failed', async () => {
+        network.currentInterface.mockRejectedValue(new Error('Failed'));
+
+        await index(['', ''], sink, mockExit);
+
+        expect(network.currentInterface).toHaveBeenCalled();
+        expect(mockExit).toHaveBeenCalledWith(2);
+    });
+
+    test('check failed', async () => {
+        run.default.mockResolvedValue(false);
+
+        await index(['', ''], sink, mockExit);
+
+        expect(command.default).toHaveBeenCalled();
+        expect(mockExit).toHaveBeenCalledWith(3);
+    });
 });
 
-test('check failed', async () => {
-    run.default.mockResolvedValue(false);
+describe('ipv6', () => {
+    beforeEach(() => {
+        network.currentInterface.mockResolvedValue({
+            name: 'custom0',
+            address: IPv6.fromHexadecimalString('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'),
+            defaultDNS: []
+        } as NetworkInterface);
+        
+        command.default.mockResolvedValue({
+            testDNS: IPv6.fromHexadecimalString('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'),
+            hostname: 'example.com',
+            externalGateway: IPv6.fromHexadecimalString('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')
+        } as Options);
+    });
 
-    await index(['', ''], sink, mockExit);
+    test('run', async () => {
+        await index(['', ''], sink, mockExit);
+        expect(mockExit).not.toHaveBeenCalled();
+        expect(network.currentInterface).toHaveBeenCalled();
+    });
 
-    expect(command.default).toHaveBeenCalled();
-    expect(mockExit).toHaveBeenCalledWith(3);
+    test('network interface failed', async () => {
+        network.currentInterface.mockRejectedValue(new Error('Failed'));
+
+        await index(['', ''], sink, mockExit);
+
+        expect(network.currentInterface).toHaveBeenCalled();
+        expect(mockExit).toHaveBeenCalledWith(2);
+    });
+
+    test('check failed', async () => {
+        run.default.mockResolvedValue(false);
+
+        await index(['', ''], sink, mockExit);
+
+        expect(command.default).toHaveBeenCalled();
+        expect(mockExit).toHaveBeenCalledWith(3);
+    });
 });

@@ -1,5 +1,5 @@
 import { currentInterface } from '../src/network';
-import { IPv4 } from 'ip-num';
+import { IPv4, IPv6 } from 'ip-num';
 
 jest.mock('os');
 const os = require('os');
@@ -19,6 +19,7 @@ Object.defineProperty(dns, 'promises', {
 
 beforeEach(() => {
     defaultGateway.v4.mockResolvedValue(undefined);
+    defaultGateway.v6.mockRejectedValue(new Error('Unable to determine default gateway'));
 });
 
 test('load empty', async () => {
@@ -38,7 +39,21 @@ test('load', async () => {
 
     const inter = await currentInterface();
     expect(inter).not.toBeUndefined();
-    expect(inter.name).toEqual('custom0');
+    expect(inter?.name).toEqual('custom0');
+});
+
+test('load ipv6', async () => {
+    os.networkInterfaces.mockReturnValue({
+        'custom0': [{
+            address: 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
+            internal: false,
+            family: 'IPv6'
+        }]
+    });
+
+    const inter = await currentInterface();
+    expect(inter).not.toBeUndefined();
+    expect(inter?.name).toEqual('custom0');
 });
 
 test('load non-internal', async () => {
@@ -65,7 +80,22 @@ test('load gateway', async () => {
 
     const inter = await currentInterface();
     expect(inter).not.toBeUndefined();
-    expect(inter.internalGateway).toEqual(IPv4.fromDecimalDottedString('0.0.0.1'));
+    expect(inter?.internalGateway).toEqual(IPv4.fromDecimalDottedString('0.0.0.1'));
+});
+
+test('load gateway ipv6', async () => {
+    os.networkInterfaces.mockReturnValue({
+        'custom0': [{
+            address: 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
+            internal: false,
+            family: 'IPv6'
+        }]
+    });
+    defaultGateway.v6.mockResolvedValue({ gateway: '::ffff:0:1', interface: 'custom0' });
+
+    const inter = await currentInterface();
+    expect(inter).not.toBeUndefined();
+    expect(inter?.internalGateway).toEqual(IPv6.fromHexadecimalString('::ffff:0:1'));
 });
 
 test('gateway failed', async () => {

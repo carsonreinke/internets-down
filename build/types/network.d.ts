@@ -1,17 +1,17 @@
-import { IPv4 } from 'ip-num';
+import { IP } from './common';
 export interface DefaultGateway {
     gateway: string;
     interface: string;
 }
 export interface Gateway {
-    address: IPv4;
+    address: IP;
     interface: string;
 }
 export interface NetworkInterface {
     name: string;
-    address: IPv4;
-    defaultDNS: IPv4[];
-    internalGateway?: IPv4;
+    address: IP;
+    defaultDNS: IP[];
+    internalGateway?: IP;
 }
 /**
  * Get the current gateway
@@ -22,7 +22,7 @@ export declare function currentInternalGateway(): Promise<Gateway | undefined>;
 /**
  *
  */
-export declare function currentDNS(): IPv4[];
+export declare function currentDNS(): IP[];
 /**
  * Load the network interfaces and gateway
  *

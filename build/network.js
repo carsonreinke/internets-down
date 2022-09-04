@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.currentInterface = exports.currentDNS = exports.currentInternalGateway = void 0;
 var os_1 = require("os");
-var ip_num_1 = require("ip-num");
+var common_1 = require("./common");
 var defaultGateway = require("default-gateway");
 var dns_1 = require("dns");
 /**
@@ -51,14 +51,16 @@ function currentInternalGateway() {
         var gateway;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, defaultGateway.v4()];
+                case 0: return [4 /*yield*/, defaultGateway.v6().catch(function () {
+                        return defaultGateway.v4();
+                    })];
                 case 1:
                     gateway = _a.sent();
                     if (!gateway || !gateway.gateway) {
                         return [2 /*return*/, undefined];
                     }
                     return [2 /*return*/, {
-                            address: ip_num_1.IPv4.fromDecimalDottedString(gateway.gateway),
+                            address: common_1.parseIP(gateway.gateway),
                             interface: gateway.interface
                         }];
             }
@@ -70,7 +72,7 @@ exports.currentInternalGateway = currentInternalGateway;
  *
  */
 function currentDNS() {
-    return dns_1.promises.getServers().map(ip_num_1.IPv4.fromDecimalDottedString);
+    return dns_1.promises.getServers().map(common_1.parseIP);
 }
 exports.currentDNS = currentDNS;
 /**
@@ -91,12 +93,12 @@ function currentInterface() {
                     defaultDNS = currentDNS();
                     Object.keys(interfaces).forEach(function (name) {
                         //Go through all interfaces with this name
-                        interfaces[name].filter(function (i) { return !i.internal && i.family === 'IPv4'; }).forEach(function (inter) {
+                        interfaces[name].filter(function (i) { return !i.internal && (i.family === 'IPv4' || i.family === 'IPv6'); }).forEach(function (inter) {
                             //Provide the gateway if the network
                             if (internalGateway === undefined || internalGateway.interface === name) {
                                 found = {
                                     name: name,
-                                    address: ip_num_1.IPv4.fromDecimalDottedString(inter.address),
+                                    address: common_1.parseIP(inter.address),
                                     defaultDNS: defaultDNS
                                 };
                                 if (internalGateway !== undefined) {
@@ -111,4 +113,4 @@ function currentInterface() {
     });
 }
 exports.currentInterface = currentInterface;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibmV0d29yay5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3NyYy9uZXR3b3JrLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLHlCQUF1RjtBQUN2RixpQ0FBOEI7QUFDOUIsZ0RBQW1EO0FBQ25ELDJCQUFzQztBQW1CdEM7Ozs7R0FJRztBQUNILFNBQXNCLHNCQUFzQjs7Ozs7d0JBQ1IscUJBQU0sY0FBYyxDQUFDLEVBQUUsRUFBRSxFQUFBOztvQkFBbkQsT0FBTyxHQUFtQixTQUF5QjtvQkFFekQsSUFBSSxDQUFDLE9BQU8sSUFBSSxDQUFDLE9BQU8sQ0FBQyxPQUFPLEVBQUU7d0JBQzlCLHNCQUFPLFNBQVMsRUFBQztxQkFDcEI7b0JBRUQsc0JBQU87NEJBQ0gsT0FBTyxFQUFFLGFBQUksQ0FBQyx1QkFBdUIsQ0FBQyxPQUFPLENBQUMsT0FBTyxDQUFDOzRCQUN0RCxTQUFTLEVBQUUsT0FBTyxDQUFDLFNBQVM7eUJBQy9CLEVBQUM7Ozs7Q0FDTDtBQVhELHdEQVdDO0FBRUQ7O0dBRUc7QUFDSCxTQUFnQixVQUFVO0lBQ3RCLE9BQU8sY0FBRyxDQUFDLFVBQVUsRUFBRSxDQUFDLEdBQUcsQ0FBQyxhQUFJLENBQUMsdUJBQXVCLENBQUMsQ0FBQztBQUM5RCxDQUFDO0FBRkQsZ0NBRUM7QUFFRDs7OztHQUlHO0FBQ0gsU0FBc0IsZ0JBQWdCOzs7Ozs7b0JBQzVCLFVBQVUsR0FBd0Msc0JBQWlCLEVBQUUsQ0FBQztvQkFDM0MscUJBQU0sc0JBQXNCLEVBQUUsRUFBQTs7b0JBQXpELGVBQWUsR0FBWSxTQUE4QjtvQkFDekQsVUFBVSxHQUFXLFVBQVUsRUFBRSxDQUFDO29CQUd4QyxNQUFNLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxDQUFDLE9BQU8sQ0FBQyxVQUFDLElBQVk7d0JBQ3pDLDBDQUEwQzt3QkFDMUMsVUFBVSxDQUFDLElBQUksQ0FBQyxDQUFDLE1BQU0sQ0FBQyxVQUFBLENBQUMsSUFBSSxPQUFBLENBQUMsQ0FBQyxDQUFDLFFBQVEsSUFBSSxDQUFDLENBQUMsTUFBTSxLQUFLLE1BQU0sRUFBbEMsQ0FBa0MsQ0FBQyxDQUFDLE9BQU8sQ0FBQyxVQUFDLEtBQStCOzRCQUNyRyxvQ0FBb0M7NEJBQ3BDLElBQUksZUFBZSxLQUFLLFNBQVMsSUFBSSxlQUFlLENBQUMsU0FBUyxLQUFLLElBQUksRUFBRTtnQ0FDckUsS0FBSyxHQUFHO29DQUNKLElBQUksTUFBQTtvQ0FDSixPQUFPLEVBQUUsYUFBSSxDQUFDLHVCQUF1QixDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUM7b0NBQ3BELFVBQVUsWUFBQTtpQ0FDYixDQUFDO2dDQUNGLElBQUksZUFBZSxLQUFLLFNBQVMsRUFBRTtvQ0FDL0IsS0FBSyxDQUFDLGVBQWUsR0FBRyxlQUFlLENBQUMsT0FBTyxDQUFBO2lDQUNsRDs2QkFDSjt3QkFDTCxDQUFDLENBQUMsQ0FBQztvQkFDUCxDQUFDLENBQUMsQ0FBQztvQkFFSCxzQkFBTyxLQUFLLEVBQUM7Ozs7Q0FDaEI7QUF4QkQsNENBd0JDIn0=
+//# sourceMappingURL=network.js.map

@@ -1,7 +1,7 @@
-import { IPv4 } from 'ip-num';
+import { IP } from './common';
 export interface Options {
-    testDNS: IPv4;
+    testDNS: IP;
     hostname: string;
-    externalGateway: IPv4;
+    externalGateway: IP;
 }
 export default function (argv: string[]): Promise<Options>;

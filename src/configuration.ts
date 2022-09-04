@@ -1,11 +1,11 @@
-import { IPv4 } from 'ip-num';
+import { IP } from './common';
 
 export default interface Configuration {
-    defaultDNS: IPv4[];
-    testDNS: IPv4;
+    defaultDNS: IP[];
+    testDNS: IP;
     hostname: string;
     name?: string;
-    address?: IPv4;
-    internalGateway?: IPv4;
-    externalGateway?: IPv4;
+    address?: IP;
+    internalGateway?: IP;
+    externalGateway?: IP;
 }

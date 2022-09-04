@@ -50,6 +50,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var base_1 = require("./base");
+var ip_num_1 = require("ip-num");
 var pingman_1 = require("pingman");
 //Options to be used by `pingman`
 var PING_OPTIONS = {
@@ -62,10 +63,15 @@ var Ping = /** @class */ (function (_super) {
     }
     Ping.prototype.ping = function (address) {
         return __awaiter(this, void 0, void 0, function () {
-            var response;
+            var options, response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, pingman_1.default(address.toString(), PING_OPTIONS)];
+                    case 0:
+                        options = Object.assign({
+                            IPV4: address instanceof ip_num_1.IPv4,
+                            IPV6: address instanceof ip_num_1.IPv6
+                        }, PING_OPTIONS);
+                        return [4 /*yield*/, pingman_1.default(address.toString(), options)];
                     case 1:
                         response = _a.sent();
                         return [2 /*return*/, response.alive];
@@ -76,4 +82,4 @@ var Ping = /** @class */ (function (_super) {
     return Ping;
 }(base_1.default));
 exports.default = Ping;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicGluZy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9jaGVja3MvcGluZy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSwrQkFBMEI7QUFFMUIsbUNBQWtFO0FBRWxFLGlDQUFpQztBQUNqQyxJQUFNLFlBQVksR0FBd0I7SUFDdEMsT0FBTyxFQUFFLENBQUM7Q0FDYixDQUFDO0FBRUY7SUFBMkMsd0JBQUk7SUFBL0M7O0lBS0EsQ0FBQztJQUpTLG1CQUFJLEdBQVYsVUFBVyxPQUFhOzs7Ozs0QkFDVyxxQkFBTSxpQkFBSSxDQUFDLE9BQU8sQ0FBQyxRQUFRLEVBQUUsRUFBRSxZQUFZLENBQUMsRUFBQTs7d0JBQXJFLFFBQVEsR0FBaUIsU0FBNEM7d0JBQzNFLHNCQUFPLFFBQVEsQ0FBQyxLQUFLLEVBQUM7Ozs7S0FDekI7SUFDTCxXQUFDO0FBQUQsQ0FBQyxBQUxELENBQTJDLGNBQUksR0FLOUMifQ==
+//# sourceMappingURL=ping.js.map

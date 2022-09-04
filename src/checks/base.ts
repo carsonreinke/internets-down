@@ -11,5 +11,5 @@ export default abstract class Base {
         return this._name;
     }
 
-    abstract async check(configuration: Configuration): Promise<boolean>;
+    abstract check(configuration: Configuration): Promise<boolean>;
 }

@@ -46,7 +46,7 @@ var version_1 = require("./version");
  * @returns IP
  */
 function parseIP(value) {
-    return common_1.parseIP(value);
+    return (0, common_1.parseIP)(value);
 }
 function default_1(argv) {
     return __awaiter(this, void 0, void 0, function () {
@@ -57,7 +57,7 @@ function default_1(argv) {
                     program = new commander_1.Command();
                     //Get the version directly from this package
                     _b = (_a = program).version;
-                    return [4 /*yield*/, version_1.default()];
+                    return [4 /*yield*/, (0, version_1.default)()];
                 case 1:
                     //Get the version directly from this package
                     _b.apply(_a, [_c.sent()]);

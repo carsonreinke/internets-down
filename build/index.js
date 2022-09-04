@@ -69,7 +69,7 @@ module.exports = function (argv, stdout, exitFn) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, command_1.default(argv)];
+                    return [4 /*yield*/, (0, command_1.default)(argv)];
                 case 2:
                     options = _a.sent();
                     return [3 /*break*/, 4];
@@ -84,7 +84,7 @@ module.exports = function (argv, stdout, exitFn) {
                     _a.label = 5;
                 case 5:
                     _a.trys.push([5, 7, , 8]);
-                    return [4 /*yield*/, network_1.currentInterface()];
+                    return [4 /*yield*/, (0, network_1.currentInterface)()];
                 case 6:
                     inter = _a.sent();
                     return [3 /*break*/, 8];
@@ -109,7 +109,7 @@ module.exports = function (argv, stdout, exitFn) {
                 case 9:
                     if (!(_i < checks_2.length)) return [3 /*break*/, 12];
                     check = checks_2[_i];
-                    return [4 /*yield*/, checks_1.default(logger, check, configuration)];
+                    return [4 /*yield*/, (0, checks_1.default)(logger, check, configuration)];
                 case 10:
                     if (!(_a.sent())) {
                         stdout.write("\nA check failed 🙃\n");

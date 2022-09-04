@@ -48,7 +48,7 @@ function run(logger, check, configuration) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    logger.start("Checking " + check.name);
+                    logger.start("Checking ".concat(check.name));
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -58,7 +58,7 @@ function run(logger, check, configuration) {
                     return [3 /*break*/, 4];
                 case 3:
                     err_1 = _a.sent();
-                    logger.fail("Failed checking " + check.name + ": " + err_1.message);
+                    logger.fail("Failed checking ".concat(check.name, ": ").concat(err_1.message));
                     return [2 /*return*/, false];
                 case 4:
                     //Update logger with result of check
@@ -67,7 +67,7 @@ function run(logger, check, configuration) {
                         return [2 /*return*/, true];
                     }
                     else {
-                        logger.fail("Failed checking " + check.name);
+                        logger.fail("Failed checking ".concat(check.name));
                         return [2 /*return*/, false];
                     }
                     return [2 /*return*/];

@@ -95,7 +95,7 @@ test('load gateway ipv6', async () => {
 
     const inter = await currentInterface();
     expect(inter).not.toBeUndefined();
-    expect(inter?.internalGateway).toEqual(IPv6.fromHexadecimalString('::ffff:0:1'));
+    expect(inter?.internalGateway).toEqual(IPv6.fromHexadecatet('::ffff:0:1'));
 });
 
 test('gateway failed', async () => {

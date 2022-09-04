@@ -7,7 +7,7 @@ export function parseIP(address: string): IP {
     return IPv4.fromDecimalDottedString(address);
   }
   else if(Validator.isValidIPv6String(address)[0]) {
-    return IPv6.fromHexadecimalString(address);
+    return IPv6.fromHexadecatet(address);
   }
   else {
     throw new Error('Not a valid IPv4 or IPv6 address');

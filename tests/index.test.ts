@@ -79,14 +79,14 @@ describe('ipv6', () => {
     beforeEach(() => {
         network.currentInterface.mockResolvedValue({
             name: 'custom0',
-            address: IPv6.fromHexadecimalString('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'),
+            address: IPv6.fromHexadecatet('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'),
             defaultDNS: []
         } as NetworkInterface);
         
         command.default.mockResolvedValue({
-            testDNS: IPv6.fromHexadecimalString('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'),
+            testDNS: IPv6.fromHexadecatet('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'),
             hostname: 'example.com',
-            externalGateway: IPv6.fromHexadecimalString('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')
+            externalGateway: IPv6.fromHexadecatet('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff')
         } as Options);
     });
 

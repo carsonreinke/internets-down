@@ -35,7 +35,7 @@ test('dns option', async () => {
 test('dns option ipv6', async () => {
     const options = await command(['', '', '--dns', 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff']);
     expect(mockExit).not.toHaveBeenCalled();
-    expect(options.testDNS).toEqual(IPv6.fromHexadecimalString('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'));
+    expect(options.testDNS).toEqual(IPv6.fromHexadecatet('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'));
 });
 
 test('invalid dns option', async () => {
@@ -52,7 +52,7 @@ test('gateway option', async () => {
 test('gateway option ipv6', async () => {
     const options: Options = await command(['', '', '--gateway', 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff']);
     expect(mockExit).not.toHaveBeenCalled();
-    expect(options.externalGateway).toEqual(IPv6.fromHexadecimalString('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'));
+    expect(options.externalGateway).toEqual(IPv6.fromHexadecatet('ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff'));
 });
 
 test('invalid gateway option', async () => {
